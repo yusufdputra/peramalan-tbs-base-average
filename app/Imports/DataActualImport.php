@@ -2,10 +2,9 @@
 
 namespace App\Imports;
 
-use App\DatasetModel;
-use App\KabupatenModel;
-use Illuminate\Support\Facades\Session;
+use App\Datasets;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Ramsey\Uuid\Type\Integer;
 
 class DataActualImport implements ToModel
 {
@@ -16,17 +15,14 @@ class DataActualImport implements ToModel
      */
     public function model(array $row)
     {
-        return new DatasetModel([
-            'lintang' => $row[0],
-            'bujur' => $row[1],
-            'tanggal' => $this->transformDate($row[2]),
-            'jam' => $row[3],
-            'kepercayaan' => $row[4],
-            'satelit' => $row[5],
-            'kecamatan' => $row[6],
-            'id_kabupaten' => $this->RelasiKabupaten($row[7]),
-        ]);
-        
+        try {
+            return new Datasets([
+                'tanggal' => $this->transformDate($row[0]),
+                'tbs_olah' => $row[1],
+            ]);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 
     public function transformDate($value, $format = 'Y-m-d')
@@ -37,21 +33,4 @@ class DataActualImport implements ToModel
             return \Carbon\Carbon::createFromFormat($format, $value);
         }
     }
-
-    //set kabupaten menjadi relasi dengan tabel kabupaten
-    public function RelasiKabupaten($value)
-    {
-        try {
-            //data kabupaten
-            $kabupaten_row = KabupatenModel::all();
-            foreach ($kabupaten_row as $kb) {
-                if ((strpos(strtolower($value), strtolower($kb->kabupaten))) !== false) {
-                    return $kb->id;
-                }
-            }
-        } catch (\ErrorException $e) {
-            return $value;
-        }
-    }
-
 }

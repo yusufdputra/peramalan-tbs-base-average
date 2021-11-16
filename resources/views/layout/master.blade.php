@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Peramalan Titik Api Provinsi Riau - FTS CHENG</title>
+  <title>Peramalan TBS - FTS AVERAGE BASED</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
   <meta content="Coderthemes" name="author" />
@@ -62,9 +62,8 @@
           <!--</a>-->
           <!-- Image Logo -->
           <a href="{{'/'}}" class="logo">
-
-            <img src="adminto/images/logo-sm.png" alt="" height="26" class="logo-small">
-            <img src="adminto/images/logo1.png" alt="" height="24" class="logo-large">
+            <span class="logo-small"><i class="mdi mdi-radar"></i></span>
+            <span class="logo-large"><i class="mdi mdi-radar"></i> FTS-AB</span>
           </a>
         </div>
         <!-- End Logo container-->
@@ -88,9 +87,9 @@
 
 
             <li class="dropdown notification-list">
-              <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+              <!-- <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
                 <img src="adminto/images/users/avatar-1.png" alt="user" class="rounded-circle">
-              </a>
+              </a> -->
               <!-- <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
 
                   @if(Session::get('status_login') == 1)
@@ -298,12 +297,10 @@
       minViewMode: "months"
     });
 
-    jQuery('#datepicker-autoclose-modal').datepicker({
+    jQuery('.datepicker-autoclose-modal').datepicker({
       autoclose: true,
       todayHighlight: true,
-      format: "yyyy-mm",
-      startView: "months",
-      minViewMode: "months"
+      format: "yyyy-mm-dd",
     });
 
     jQuery('.datepicker-autoclose-modal-year').datepicker({
@@ -336,366 +333,33 @@
       return;
     }
 
-    function renderChart(data, labels, id_chart) {
+    function renderChart(aktual, prediksi, label, id_chart) {
+      const labels = label
+      const datas = {
+        labels: labels,
+        datasets: [
+
+          {
+            label: 'Data Prediksi',
+            data: prediksi,
+            borderColor: 'rgba(50, 168, 82, 1)',
+            backgroundColor: 'rgba(220, 247, 228, 0.1)'
+          },
+          {
+            label: 'Data TBS Olah',
+            data: aktual,
+            borderColor: 'rgba(104, 105, 188, 1)',
+            backgroundColor: 'rgba(105, 105, 188, 0.1)'
+          }
+        ]
+      };
       var ctx = document.getElementById(id_chart).getContext("2d")
       var myChart = new Chart(ctx, {
-
         type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Nilai Aktual',
-            data: data,
-            borderColor: 'rgba(91, 105, 188, 1)',
-            backgroundColor: 'rgba(91, 105, 188, 0.1)',
-          }],
-        },
+        data: datas
       });
     }
 
-    // $(document).ready(function() {
-    //   $('#selected_kabupaten_norm').on('change', function(e) {
-    //     var jenis = document.getElementById('jenis_data').value;
-    //     var id = e.target.value;
-    //     $('#dataset_row').html("");
-    //     $.get('{{url("normalisasi_data_ajax")}}/' + id + '/' + jenis, function(data) {
-    //       console.log(data)
-    //       $.each(data, function(index, element) {
-    //         //set untuk tabel
-    //         const bulan = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    //         var format = bulan[element.bulan - 1] + "-" + element.tahun
-    //         $('#dataset_row').append("<tr><td>" + (index + 1) + "</td><td>" + format + "</td><td>" + element.jumlah_kejadian + "</td><td>" + element.normalisasi + "</td></tr>");
-    //       })
-    //     })
-    //   })
-    // })
-
-    // function do_preprocessing() {
-    //   var date = document.getElementById('i_date').value;
-    //   $('#dataset_row').html("");
-    //   $.ajax({
-    //     url: '{{url("preprocessing_data")}}/' + date,
-    //     type: 'GET',
-    //     dataType: 'json',
-    //     success: 'success',
-    //     success: function(data) {
-    //       toastr.success('Sukses melakukan transformasi data!')
-    //       $.each(data, function(index, element) {
-    //         //set untuk tabel
-    //         const bulan = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    //         var format = bulan[element.bulan - 1] + "-" + element.tahun
-    //         $('#dataset_row').append("<tr><td>" + (index + 1) + "</td><td>" + format + "</td><td>" + element.kabupaten + "</td><td>" + element.jumlah_kejadian + "</td></tr>");
-    //       })
-    //     },
-    //     error: function(data) {
-    //       toastr.error('Gagal melakukan transformasi data!')
-    //     }
-    //   })
-    // }
-
-
-    // function do_normalisasi(jenis) {
-    //   var id_kab = document.getElementById('selected_kabupaten_norm').value;
-    //   var start_time = document.getElementById('start_time').value;
-    //   var end_time = document.getElementById('end_time').value;
-
-    //   if (id_kab != "Pilih Kabupaten" && start_time != '' && end_time != '') {
-
-    //     $('#dataset_row').html("");
-    //     $.ajax({
-    //       url: '{{url("normalisasi_ajax")}}/' + id_kab + '/' + start_time + '/' + end_time + '/' + jenis,
-    //       type: 'GET',
-    //       dataType: 'json',
-    //       success: 'success',
-    //       success: function(data) {
-
-    //         toastr.success('Sukses melakukan normalisasi data!')
-    //         $.each(data, function(index, element) {
-    //           //set untuk tabel
-    //           const bulan = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    //           var format = bulan[element.bulan - 1] + "-" + element.tahun
-    //           $('#dataset_row').append("<tr><td>" + (index + 1) + "</td><td>" + format + "</td><td>" + element.jumlah_kejadian + "</td><td>" + element.normalisasi + "</td></tr>");
-    //         });
-    //       },
-    //       error: function(data) {
-    //         toastr.error('Gagal melakukan normalisasi data!')
-    //       }
-    //     })
-    //   } else {
-    //     toastr.info('Silahkan isi data terlebih dahulu!')
-    //   }
-
-    // }
-
-    // function do_latih() {
-
-    //   var id_kab = document.getElementById('selected_kabupaten_latih').value;
-    //   id_chart = "lineChart-fts"
-
-    //   if (id_kab != "Pilih Kabupaten") {
-
-    //     $('#dataset_row').html("");
-    //     $('#nilai_u').html("");
-    //     $('#nilai_R').html("");
-    //     $('#nilai_K').html("");
-    //     $('#nilai_I').html("");
-    //     $('#tabel_nilai_batas_kelas1').html("");
-    //     $('#tabel_nilai_batas_kelas2').html("");
-    //     $('#tabel_fuzzifikasi').html("");
-    //     $('#tabel_fl').html("");
-    //     $('#tabel_pembobot').html("");
-    //     $('#tabel_defuzzifikasi').html("");
-    //     $('#tabel_peramalan').html("");
-    //     $('#lineChart-fts').html("");
-    //     $('#matriks_pembobot').html("")
-    //     $('#matriks_terstandarisasi').html("")
-    //     $('#matriks_h_fuzzy').html("")
-    //     $('#hori-matriks_h_fuzzy').html("")
-    //     $('#verti-matriks_h_fuzzy').html("")
-    //     $('#tabel_linguistik').html("")
-    //     clearChart(id_chart)
-
-
-    //     $.ajax({
-    //       url: '{{url("latihAjax")}}/' + id_kab,
-    //       type: 'GET',
-    //       dataType: 'json',
-    //       success: 'success',
-
-    //       success: function(data) {
-    //         toastr.success('Sukses melakukan pelatihan data!')
-
-    //         $('#nilai_u').append("U = [" + data[2]['konstanta']['minimum'] + " , " + data[2]['konstanta']['maximum'] + "]") //nilai minimum, dan maximum 
-    //         $('#nilai_R').append("R = " + data[2]['konstanta']['R']) //nilai R
-    //         $('#nilai_K').append("K = " + data[2]['konstanta']['K']) //nilai K
-    //         $('#nilai_I').append("I = " + data[2]['konstanta']['I']) //nilai I 
-    //         // $('#mape').append(parseFloat(data[3]))
-    //         //set untuk chart
-    //         var data_ = [];
-    //         data_.push(data[1]); // data actual
-    //         data_.push(data[2]['prediksi']); // data prediksi
-
-    //         var labels = data[0];
-
-    //         renderChart(data_, labels, id_chart);
-    //         // print datasets
-    //         $.each(data[0], function(index, element) {
-
-    //           //set untuk tabel
-    //           var time = (data[0][index])
-    //           const bulan = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    //           $('#dataset_row').append(
-    //             "<tr><td>" + (index + 1) + "</td><td>" + time + "</td><td>" + data[1][index] + "</td></tr>"
-    //           );
-
-    //         });
-
-    //         // himpunan semesta 1
-    //         $.each(data[2]['nilai_batas_kelas']['batas_bawah'], function(index, element) {
-
-    //           $('#tabel_nilai_batas_kelas1').append(
-    //             "<tr><td> U" + (index + 1) + "</td><td>" + data[2]['nilai_batas_kelas']['batas_bawah'][index] + "</td><td>" + data[2]['nilai_batas_kelas']['batas_atas'][index] + "</td><td>" + data[2]['nilai_batas_kelas']['nilai_tengah'][index] + "</td><td>" + data[2]['nilai_batas_kelas']['frekuensi'][index] + "</td></tr>"
-    //           )
-    //         })
-
-    //         // himpunan semesta kondisi 2
-    //         $.each(data[2]['new_nilai_batas_kelas']['batas_bawah'], function(index, element) {
-    //           $('#tabel_nilai_batas_kelas2').append(
-    //             "<tr><td> U" + (index + 1) + "</td><td>" + data[2]['new_nilai_batas_kelas']['batas_bawah'][index] + "</td><td>" + data[2]['new_nilai_batas_kelas']['batas_atas'][index] + "</td><td>" + data[2]['new_nilai_batas_kelas']['nilai_tengah'][index] + "</td></tr>"
-    //           )
-    //         })
-
-    //         // Mendefinisikan Himpunan Fuzzy
-    //         // bagi array 1 dimensi menjadi 2 dimensi 
-    //         var row_w = data[2]['new_nilai_batas_kelas']['batas_bawah'] // get jumlah baris matriks
-
-    //         var matriks_fuzzy = data[2]['himpunan_fuzzy'] // get data matriks
-    //         var matriks_fuzzy_new = [],
-    //           i, k;
-    //         for (i = 0, k = -1; i < matriks_fuzzy.length; i++) {
-    //           if (i % row_w.length === 0) {
-    //             k++;
-    //             matriks_fuzzy_new[k] = [];
-    //           }
-    //           matriks_fuzzy_new[k].push(matriks_fuzzy[i]);
-    //         }
-
-    //         // Mendefinisikan Himpunan Fuzzy
-    //         // bentuk value horizontal title
-    //         for (let i = 0; i < matriks_fuzzy_new[0].length + 1; i++) {
-    //           $('#hori-matriks_h_fuzzy').append('<div class="row col-auto"><div class="input-group-prepend mb-2 mr-2"><div class="input-group-text page-link"  style=" width:45px; font-size:10px; !important">A' + i + '</div></div></div>')
-    //         }
-    //         for (let i = 0; i < matriks_fuzzy_new[0].length; i++) {
-    //           $('#verti-matriks_h_fuzzy').append('<div class="row"><div class="input-group-prepend mb-2"><div class="input-group-text page-link" style=" width:45px; font-size:10px; !important">A' + (i + 1) + '</div></div></div>')
-    //         }
-    //         //bentuk value dalam matriks
-    //         var am_fuzzy = [],
-    //           l
-    //         for (let j = 0; j < (matriks_fuzzy_new[0].length); j++) {
-    //           for (let k = 0; k < (matriks_fuzzy_new[0].length); k++) {
-    //             if (k % matriks_fuzzy_new[0].length === 0) {
-    //               am_fuzzy[j] = []
-    //             }
-    //             am_fuzzy[j][k] = ('<div class="row"><div class="input-group-prepend mb-2 mr-3"><div class=" input-group-text page-link " style=" width:45px; font-size:10px; color:black !important">' + matriks_fuzzy_new[j][k] + '</div></div>')
-    //           }
-    //         }
-    //         for (let i = 0; i < matriks_fuzzy_new[0].length; i++) {
-    //           $('#matriks_h_fuzzy').append('<div class="row col-auto">' + am_fuzzy[i] + '</div>')
-    //         }
-
-    //         // Nilai Linguistik
-    //         $.each(data[2]['defuzzifikasi'], function(index, element) {
-    //           $('#tabel_linguistik').append(
-    //             "<tr><td>A" + (index + 1) + "</td><td>" + data[2]['nilai_linguistik'][index] + "</td></tr>"
-    //           );
-    //         });
-
-    //         // fuzzifikasi
-    //         $.each(data[0], function(index, element) {
-
-    //           var time = (data[0][index])
-
-    //           $('#tabel_fuzzifikasi').append(
-    //             "<tr><td>" + (index + 1) + "</td><td>" + time + "</td><td>" + data[1][index] + "</td><td>" + data[2]['fuzzifikasi'][index] + "</td></tr>"
-    //           );
-    //         });
-
-    //         // FL
-    //         $.each(data[0], function(index, element) {
-    //           var time = (data[0][index])
-
-    //           $('#tabel_fl').append(
-    //             "<tr><td>" + (index + 1) + "</td><td>" + time + "</td><td>" + data[1][index] + "</td><td>" + data[2]['flr'][index] + "</td><td>" + data[2]['flrg'][index] + "</td></tr>"
-    //           );
-    //         });
-
-    //         // matriks pembobot
-    //         // bagi array 1 dimensi menjadi 2 dimensi 
-
-    //         var matriks_pembobot = data[2]['matriks_pembobot'] // get data matriks
-    //         var matriks_pembobot_new = [],
-    //           i, k;
-    //         for (i = 0, k = -1; i < matriks_pembobot.length; i++) {
-    //           if (i % row_w.length === 0) {
-    //             k++;
-    //             matriks_pembobot_new[k] = [];
-    //           }
-    //           matriks_pembobot_new[k].push(matriks_pembobot[i]);
-    //         }
-
-    //         // Pembobotan
-    //         var am_pembobotan = []
-    //         for (let j = 0; j < matriks_pembobot_new[0].length; j++) {
-    //           for (let k = 0; k < matriks_pembobot_new[0].length; k++) {
-    //             if (k % matriks_pembobot_new[0].length === 0) {
-    //               am_pembobotan[j] = []
-    //             }
-    //             am_pembobotan[j][k] = ('<div class="row"><div class="input-group-prepend mb-2 mr-3"><div class=" input-group-text page-link " style=" width:45px; font-size:10px; color:black !important">' + matriks_pembobot_new[j][k] + '</div></div>')
-    //           }
-    //         }
-    //         for (let i = 0; i < matriks_pembobot_new[0].length; i++) {
-    //           $('#matriks_pembobot').append('<div class="row col-auto">' + am_pembobotan[i] + '</div>')
-    //         }
-
-    //         // matriks Terstandarisasi
-    //         // bagi array 1 dimensi menjadi 2 dimensi 
-    //         var matriks_terstandarisasi = data[2]['matriks_terstandarisasi'] // get data matriks
-    //         var matriks_terstandarisasi_new = [],
-    //           i, k;
-    //         for (i = 0, k = -1; i < matriks_terstandarisasi.length; i++) {
-    //           if (i % row_w.length === 0) {
-    //             k++;
-    //             matriks_terstandarisasi_new[k] = [];
-    //           }
-    //           matriks_terstandarisasi_new[k].push(matriks_terstandarisasi[i]);
-    //         }
-
-    //         // Pembobotan terstandarisasi
-    //         var am_standarisasi = []
-    //         for (let j = 0; j < matriks_terstandarisasi_new[0].length; j++) {
-    //           for (let k = 0; k < matriks_terstandarisasi_new[0].length; k++) {
-    //             if (k % matriks_terstandarisasi_new[0].length === 0) {
-    //               am_standarisasi[j] = []
-    //             }
-    //             am_standarisasi[j][k] = ('<div class="row"><div class="input-group-prepend mb-2 mr-3"><div class=" input-group-text page-link " style=" width:45px; font-size:10px;  color:black !important">' + (matriks_terstandarisasi_new[j][k]).toFixed(2) + '</div></div>')
-    //           }
-    //         }
-    //         for (let i = 0; i < matriks_pembobot_new[0].length; i++) {
-    //           $('#matriks_terstandarisasi').append('<div class="row col-auto">' + am_standarisasi[i] + '</div>')
-    //         }
-
-
-
-    //         // Defuzzifikasi
-    //         $.each(data[2]['defuzzifikasi'], function(index, element) {
-    //           $('#tabel_defuzzifikasi').append(
-    //             "<tr><td>G" + (index + 1) + "</td><td>A" + (index + 1) + "</td><td>" + data[2]['defuzzifikasi'][index] + "</td></tr>"
-    //           );
-    //         });
-    //         // Peramalan
-    //         $.each(data[0], function(index, element) {
-    //           //set untuk tabel
-    //           var time = (data[0][index])
-    //           $('#tabel_peramalan').append(
-    //             "<tr><td>" + (index + 1) + "</td><td>" + time + "</td><td>" + data[1][index] + "</td><td>" + data[2]['fuzzifikasi'][index] + "</td><td>" + data[2]['prediksi'][index] + "</td></tr>"
-    //           );
-    //         });
-    //       },
-    //       error: function(data) {
-    //         toastr.error('Gagal melakukan pelatihan data! ' + data['responseText'])
-    //       }
-    //     })
-    //   } else {
-    //     toastr.info('Silahkan isi data terlebih dahulu!')
-    //   }
-    // }
-
-    // function do_pengujian() {
-
-    //   var id_kab = document.getElementById('selected_kabupaten_latih').value;
-    //   id_chart = "lineChart-fts-pengujian"
-
-    //   if (id_kab != "Pilih Kabupaten") {
-    //     $('#tabel_pengujian').html("");
-    //     $('#lineChart-fts-pengujian').html("");
-    //     $('#nilai_mape').html("");
-    //     clearChart(id_chart)
-
-    //     $.ajax({
-    //       url: '{{url("UjiAjax")}}/' + id_kab,
-    //       type: 'GET',
-    //       dataType: 'json',
-    //       success: 'success',
-
-    //       success: function(data) {
-    //         // console.log(data)
-    //         toastr.success('Sukses melakukan pengujian data!')
-    //         $('#nilai_mape').append(data[2]['mape']) //nilai rmse
-
-    //         //set untuk chart
-    //         var data_ = [];
-    //         data_.push(data[1]); // data actual
-    //         data_.push(data[2]['prediksi']); // data prediksi
-    //         var labels = data[0];
-    //         renderChart(data_, labels, id_chart);
-    //         //Pengujian
-    //         $.each(data[0], function(index, element) {
-    //           //set untuk tabel
-    //           var time = (data[0][index])
-    //           $('#tabel_pengujian').append(
-    //             "<tr><td>" + (index + 1) + "</td><td>" + time + "</td><td>" + data[1][index] + "</td><td>" + data[2]['fuzzifikasi'][index] + "</td><td>" + data[2]['prediksi'][index] + "</td></tr>"
-    //           );
-    //         });
-    //       },
-    //       error: function(data) {
-
-    //         toastr.error('Gagal melakukan pengujian data! ' + data['responseText'])
-    //       }
-    //     })
-    //   } else {
-    //     toastr.info('Silahkan isi data terlebih dahulu!')
-    //   }
-    // }
   </script>
 
   <script type="text/javascript">
@@ -715,48 +379,44 @@
   <script type="text/javascript">
     function do_forecasting() {
 
-      var kab = document.getElementById('selected_kabupaten_forecast').value;
       id_chart = "lineChart_aktual"
 
-      if (kab != "Pilih Kabupaten" && kab != null) {
-        $('#loading_page').html("");
-        $('#loading_page').append('<div class="loading"></div>');
-        $('#lineChart_aktual').html("");
-        $('#angka_peramalan').html("");
-        $('#badge_linguistik').html("");
-        clearChart(id_chart)
+      $('#loading_page').html("");
+      $('#loading_page').append('<div class="loading"></div>');
+      $('#lineChart_aktual').html("");
+      $('#angka_peramalan').html("");
+      $('#badge_tanggal').html("");
+      clearChart(id_chart)
 
-        $.ajax({
+      $.ajax({
 
-          url: '{{url("forecasting")}}/' + kab,
-          type: 'GET',
-          dataType: 'json',
-          success: 'success',
+        url: '{{url("forecasting")}}',
+        type: 'GET',
+        dataType: 'json',
+        success: 'success',
 
-          success: function(data) {
-            $('#loading_page').html("");
-            toastr.success('Sukses melakukan peramalan!')
+        success: function(data) {
+          $('#loading_page').html("");
+          toastr.success('Sukses melakukan peramalan!')
+          // console.log(data);
 
+          //set untuk chart
+          var tbs_olah = data[1]['tbs_normalisasi']; // data actual
+          var prediksi = data[1]['prediksi']; // data prediksi
+          var labels = data[0];
+          renderChart(tbs_olah, prediksi, labels, id_chart);
 
-            //set untuk chart
-            var data_ = data[0]['n_per_time']; // data actual
-            var labels = data[0]['time'];
-            renderChart(data_, labels, id_chart);
+          //set untuk peramalan 
+          $('#angka_peramalan').append(((Math.round(data[1]['prediksi_next'])) - 1))
+          $('#badge_tanggal').append(data[2])
+        },
+        error: function(data) {
+          // console.log(data['responseText']);
+          $('#loading_page').html("");
+          toastr.error('Gagal melakukan peramalan! ')
+        }
+      })
 
-            //set untuk peramalan 
-            $('#angka_peramalan').append(((Math.round(data[0]['prediksi_next'])) - 1))
-            $('#badge_linguistik').append(data[0]['fuzzy_prediksi_next'])
-          },
-          error: function(data) {
-            $('#loading_page').html("");
-            toastr.error('Gagal melakukan peramalan! ')
-          }
-        })
-
-
-      } else {
-        toastr.error('Gagal melakukan peramalan! Pilih Kabupaten!')
-      }
 
     }
     $(document).ready(function() {
@@ -766,43 +426,6 @@
     $("map.area").hover(function() {
       $(this).fadeOut(100);
       $(this).fadeIn(500);
-    });
-
-    $("area").click(function(e) {
-      var id_kab = e.target.alt;
-      var id_chart = 'lineChart-aktual'
-      id_chart = "lineChart_aktual"
-      clearChart(id_chart)
-      $('#loading_page').html("");
-      $('#loading_page').append('<div class="loading"></div>');
-      $('#lineChart_aktual').html("");
-      $('#angka_peramalan').html("");
-      $('#badge_linguistik').html("");
-      clearChart(id_chart)
-      $.ajax({
-        url: '{{url("forecasting")}}/' + id_kab,
-        type: 'GET',
-        dataType: 'json',
-        success: 'success',
-
-        success: function(data) {
-          $('#loading_page').html("");
-          toastr.success('Sukses melakukan peramalan!')
-          console.log(data)
-
-          //set untuk chart
-          var data_ = data[0]['n_per_time']; // data actual
-          var labels = data[0]['time'];
-          renderChart(data_, labels, id_chart);
-
-          //set untuk peramalan 
-          $('#angka_peramalan').append(((Math.round(data[0]['prediksi_next'])) - 1))
-          $('#badge_linguistik').append(data[0]['fuzzy_prediksi_next'])
-        },
-        error: function(data) {
-          toastr.error('Gagal memanggil data')
-        }
-      })
     });
   </script>
 

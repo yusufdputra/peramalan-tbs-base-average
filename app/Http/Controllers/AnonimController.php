@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DatasetModel;
+use App\Datasets;
 use App\PengujianModel;
 use App\PelatihanModel;
 use App\KabupatenModel;
@@ -17,10 +18,10 @@ class AnonimController extends Controller
     public function index()
     {
         //ambil data kabupaten
-        $kabupaten_row = KabupatenModel::all();
+        $data['datasets'] = Datasets::orderBy('tanggal', 'DESC')->get();
        
 
-        return view('layout/index', ['kabupaten_row' => $kabupaten_row]);
+        return view('layout.index', compact('data'));
     }
 
 
