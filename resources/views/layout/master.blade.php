@@ -240,7 +240,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12 text-center">
-          Peramalan Titik Panas Provinsi Riau Menggunakan Metode Cheng - Yusuf Dwi Putra
+        Peramalan TBS - FTS AVERAGE BASED
         </div>
       </div>
     </div>
@@ -398,7 +398,7 @@
         success: function(data) {
           $('#loading_page').html("");
           toastr.success('Sukses melakukan peramalan!')
-          // console.log(data);
+          console.log(data);
 
           //set untuk chart
           var tbs_olah = data[1]['tbs_normalisasi']; // data actual
@@ -411,7 +411,7 @@
           $('#badge_tanggal').append(data[2])
         },
         error: function(data) {
-          // console.log(data['responseText']);
+          console.log(data['responseText']);
           $('#loading_page').html("");
           toastr.error('Gagal melakukan peramalan! ')
         }
