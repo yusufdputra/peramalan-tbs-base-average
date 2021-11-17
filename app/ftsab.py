@@ -46,7 +46,7 @@ minimum_tbs = np.min(tbs)
 maximum_tbs = np.max(tbs)
 #normalisasi
 tbs_normalisasi = (tbs - minimum_tbs)/(maximum_tbs-minimum_tbs) * (5-1)+1
-
+print("tbs normalisasi ",tbs_normalisasi)
 #selisih absolut
 selisih_absolut = []
 i = 0
@@ -325,18 +325,18 @@ avg_mape = (np.mean(mape))*100
 ## get nilai prediksi selanjutnya
 get_next_predict = prediksi[-1]
 prediksi_next = round((((get_next_predict-1) * (maximum_tbs-minimum_tbs))/(5-1))+minimum_tbs)
- 
-arr = {
-    'avg_mape' : avg_mape,
-    'prediksi_next' : prediksi_next,
-    'tbs_normalisasi' : tbs_normalisasi.tolist(),
-    'prediksi' : prediksi,
+print("prediksi ",prediksi_next)
+# arr = {
+#     'avg_mape' : avg_mape,
+#     'prediksi_next' : prediksi_next,
+#     'tbs_normalisasi' : tbs_normalisasi.tolist(),
+#     'prediksi' : prediksi,
     
-}
+# }
 
-xx = json.dumps(arr)
+# xx = json.dumps(arr)
 
-print (xx)  
+# print (xx)  
 
 ##============================================================================
 ## Membuat chart data aktual dan prediksi
