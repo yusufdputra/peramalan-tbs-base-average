@@ -240,7 +240,7 @@
     <div class="container">
       <div class="row">
         <div class="col-12 text-center">
-        Peramalan TBS - FTS AVERAGE BASED
+          Peramalan TBS - FTS AVERAGE BASED
         </div>
       </div>
     </div>
@@ -285,6 +285,25 @@
   <!-- image size auto -->
   <script src="adminto/js/imageMapResizer.min.js"></script>
 
+  <script type="text/javascript">
+    $('.edit_row').click(function() {
+      var id = $(this).data('id');
+      var tanggal = $(this).data('tanggal');
+      var tbs = $(this).data('tbs');
+      $('#edit_id').val(id)
+      $('#edit_tanggal').val(tanggal)
+      $('#edit_tbs').val(tbs)
+
+    });
+
+    $('.hapus_row').click(function() {
+      var id = $(this).data('id');
+      var tanggal = $(this).data('tanggal');
+      var tbs = $(this).data('tbs');
+      $('#id_hapus').val(id);
+      $('#datasets_hapus').html(tanggal+' Jumlah TBS Olah '+tbs);
+    });
+  </script>
 
   <script type="text/javascript">
     // Date Picker
@@ -359,7 +378,6 @@
         data: datas
       });
     }
-
   </script>
 
   <script type="text/javascript">

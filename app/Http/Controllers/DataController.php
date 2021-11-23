@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Datasets;
 use App\Imports\DataActualImport;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -45,11 +46,7 @@ class DataController extends Controller
             $query = Excel::import(new DataActualImport, public_path('/file_data/' . $nama_file));
 
             //notifikasi dg session
-            if ($query != false) {
-                Session::flash('success', 'Data berhasil diimport!');
-            } else {
-                Session::flash('error', 'Terjadi kesalahan saat import!');
-            }
+            self::notif($query);
         } catch (\Throwable $th) {
             Session::flash('error', 'Terjadi kesalahan saat import!');
         }
@@ -64,16 +61,61 @@ class DataController extends Controller
             $query = Datasets::whereBetween('tanggal', [$request->start_date, $request->end_date])->delete();
 
             //notifikasi dg session
-            if ($query) {
-                Session::flash('success', 'Data berhasil dihapus!');
-            } else {
-                Session::flash('error', 'Data Gagal dihapus!');
-            }
+            self::notif($query);
         } catch (\Throwable $th) {
             Session::flash('error', 'Data Gagal dihapus!');
         }
         //alihkan halaman kembali
         return redirect('/');
+    }
+
+    public function update(Request $request)
+    {
+        $query = Datasets::where('id', $request->id)
+        ->update([
+            'tanggal'       => $request->tanggal,
+            'tbs_olah'      => $request->tbs,
+            'created_at'    => Carbon::now(),
+            'updated_at'    => Carbon::now(),
+        ]);
+        self::notif($query);
+        
+        return redirect('/');
+    }
+
+    public function store(Request $request)
+    {
+        $query = Datasets::insert([
+            'tanggal'       => $request->tanggal,
+            'tbs_olah'      => $request->tbs,
+            'created_at'    => Carbon::now(),
+            'updated_at'    => Carbon::now(),
+            
+        ]);
+
+        self::notif($query);
+        
+        return redirect('/');
+    }
+
+    public function delete(Request $request)
+    {
+       $query = Datasets::where('id', $request->id)
+       ->delete();
+       
+       self::notif($query);
+        
+       return redirect('/');
+    }
+
+    static function notif($query)
+    {
+        //notifikasi dg session
+        if ($query) {
+            Session::flash('success', 'Berhasil!');
+        } else {
+            Session::flash('error', 'Oppss... Terjadi Kesalahan!');
+        }
     }
 
 
