@@ -71,6 +71,11 @@ class DataController extends Controller
 
     public function update(Request $request)
     {
+        // cek tanggal
+        if (($request->tanggal_old != $request->tanggal) && (Datasets::where('tanggal', $request->tanggal)->exists())) {
+            Session::flash('error', 'Oppss... Tanggal sudah ada!');
+            return redirect('/');
+        }
         $query = Datasets::where('id', $request->id)
         ->update([
             'tanggal'       => $request->tanggal,
@@ -85,6 +90,11 @@ class DataController extends Controller
 
     public function store(Request $request)
     {
+        // cek tanggal
+        if (Datasets::where('tanggal', $request->tanggal)->exists()) {
+            Session::flash('error', 'Oppss... Tanggal sudah ada!');
+            return redirect('/');
+        }
         $query = Datasets::insert([
             'tanggal'       => $request->tanggal,
             'tbs_olah'      => $request->tbs,
@@ -102,7 +112,7 @@ class DataController extends Controller
     {
        $query = Datasets::where('id', $request->id)
        ->delete();
-       
+
        self::notif($query);
         
        return redirect('/');

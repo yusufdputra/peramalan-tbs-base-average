@@ -260,6 +260,7 @@
         @csrf
         <div class="text-left">
           <input type="hidden" name="id" id="edit_id">
+          <input type="hidden" name="tanggal_old" id="edit_tanggal_old">
           <div class="row mb-3">
             <label for="nama" class="col-4 col-xl-3 col-form-label">Tanggal</label>
             <div class="col-8 col-xl-9">

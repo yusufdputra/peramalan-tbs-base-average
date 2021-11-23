@@ -292,6 +292,7 @@
       var tbs = $(this).data('tbs');
       $('#edit_id').val(id)
       $('#edit_tanggal').val(tanggal)
+      $('#edit_tanggal_old').val(tanggal)
       $('#edit_tbs').val(tbs)
 
     });
