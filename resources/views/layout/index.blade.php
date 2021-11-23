@@ -230,7 +230,7 @@
           <div class="row mb-3">
             <label for="nama" class="col-4 col-xl-3 col-form-label">TBS Olah</label>
             <div class="col-8 col-xl-9">
-              <input class="form-control" type="number" autocomplete="off" name="tbs" required="" placeholder="Jumlah TBS">
+              <input class="form-control" type="number" min="1" autocomplete="off" name="tbs" required="" placeholder="Jumlah TBS">
             </div>
           </div>
 
@@ -269,7 +269,7 @@
           <div class="row mb-3">
             <label for="nama" class="col-4 col-xl-3 col-form-label">TBS Olah</label>
             <div class="col-8 col-xl-9">
-              <input class="form-control" type="number" autocomplete="off" id="edit_tbs" name="tbs" required="" placeholder="Jumlah TBS">
+              <input class="form-control" type="number" min="1" autocomplete="off" id="edit_tbs" name="tbs" required="" placeholder="Jumlah TBS">
             </div>
           </div>
 

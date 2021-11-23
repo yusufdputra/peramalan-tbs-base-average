@@ -17,7 +17,7 @@ class CreateDatasetsTable extends Migration
             $table->id();
             $table->date('tanggal');
             $table->double('tbs_olah',22,10);
-            $table->double('tbs_olah_normalisasi',22,10)->nullable();
+            // $table->double('tbs_olah_normalisasi',22,10)->nullable();
             $table->timestamps();
         });
     }
